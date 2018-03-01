@@ -17,30 +17,33 @@ const jwtOptions = {}
 
 jwtOptions.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken()
 
-router.post('/login', async(request, response) => {
+router.post('/login', async (request, response) => {
 
-    const {password, email} = request.body
-    const user = await User.getUserByEmail(email)
-    if (!await User.authenticateUser(password, user)) {
-        response.status(401).json({message: 'passwords did not match'})
-    }
+  const {password, email} = request.body
+  const user = await User.getUserByEmail(email)
+  if (!await User.authenticateUser(password, user)) {
+    response.status(401).json({message: 'passwords did not match'})
+  }
 
-    response.json({
-        message: 'ok',
-        token: jwt.sign(user.get({plain: true}), config.get('secretToken'))
-    })
+  response.json({
+    message: 'ok',
+    token: jwt.sign(user.get({plain: true}), config.get('secretToken')),
+    user: user.get({plain: true})
+  })
 
 
 })
 
-router.post('/register', async(request, response) => {
+router.post('/register', async (request, response) => {
 
-    const user = await User.createUser(request.body)
+  const user = await User.createUser(request.body)
 
-    response.json({
-        message: 'ok',
-        token: jwt.sign(user[0].get({plain: true}), config.get('secretToken'))
-    })
+  response.json({
+    message: 'ok',
+    token: jwt.sign(user[0].get({plain: true}), config.get('secretToken')),
+    user: user[0].get({plain: true})
+
+  })
 
 
 })

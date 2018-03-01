@@ -7,7 +7,7 @@ const bodyParser = require('body-parser')
 const jwt = require('jsonwebtoken')
 const _ = require('lodash')
 const passport = require('./config/passport')
-
+const cors = require('cors')
 const app = express()
 
 app.use(logger('dev'))
@@ -39,9 +39,5 @@ app.use((req, res, next) => {
 //     res.status(err.status || 500)
 //     res.send(err.message)
 // })
-
-app.listen(3333, function () {
-  console.log('Express running')
-})
 
 module.exports = app
