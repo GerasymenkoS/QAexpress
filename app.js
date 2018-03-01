@@ -6,12 +6,7 @@ const cookieParser = require('cookie-parser')
 const bodyParser = require('body-parser')
 const jwt = require('jsonwebtoken')
 const _ = require('lodash')
-const config = require('./config')
-const passport = require('passport')
-const passportJWT = require('passport-jwt')
-const User = require('./models').User
-const ExtractJwt = passportJWT.ExtractJwt
-const JwtStrategy = passportJWT.Strategy
+const passport = require('./config/passport')
 
 const app = express()
 
@@ -24,33 +19,13 @@ app.use(passport.initialize())
 
 
 app.use('/api', require('./routes/auth'))
-app.use('/api', require('./routes/questions'))
-
-const jwtOptions = {}
-
-jwtOptions.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken()
-jwtOptions.secretOrKey = config.get('secretToken')
-
-const strategy = new JwtStrategy(jwtOptions, async(jwt_payload, next) => {
-    console.log('payload received', jwt_payload)
-
-    const user = await User.findById(jwt_payload.id)
-
-    if (user) {
-        next(null, user)
-    } else {
-        next(null, false)
-    }
-})
-
-
-passport.use(strategy)
+app.use('/api', passport.authenticate('jwt', {session: false}), require('./routes/questions'))
 
 
 app.use((req, res, next) => {
-    const err = new Error('Not Found')
-    err.status = 404
-    next(err)
+  const err = new Error('Not Found')
+  err.status = 404
+  next(err)
 })
 
 // // error handler
@@ -64,8 +39,8 @@ app.use((req, res, next) => {
 //     res.send(err.message)
 // })
 
-app.listen(3333, function() {
-    console.log('Express running')
+app.listen(3333, function () {
+  console.log('Express running')
 })
 
 module.exports = app
