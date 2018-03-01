@@ -1,0 +1,36 @@
+{
+  "port": 3000,
+  "hostname": "localhost",
+  "secretToken": "oEulamI7BYmbBIewa1lsM2lhZWIiPurl",
+  "development": {
+    "database": "crmDb",
+    "username": "crm",
+    "password": "crm",
+    "pool": {
+      "max": 5,
+      "min": 0,
+      "acquire": 30000,
+      "idle": 10000
+    },
+    "dialect": "mysql"
+  },
+  "test": {
+    "username": "root",
+    "password": null,
+    "database": "database_test",
+    "host": "127.0.0.1",
+    "dialect": "mysql"
+  },
+  "production": {
+    "database": "nexuscrm_crmDb",
+    "username": "nexuscrm_crm",
+    "password": "9t1t@7TCp-#?",
+    "pool": {
+      "max": 5,
+      "min": 0,
+      "acquire": 30000,
+      "idle": 10000
+    },
+    "dialect": "mysql"
+  }
+}
